@@ -13,66 +13,151 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError('');
     try {
       const { data } = await login(form);
       loginUser(data.user, data.token);
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      setError(err.response?.data?.message || 'Invalid credentials');
     }
     setLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-      <div className="bg-gray-900 p-8 rounded-2xl w-full max-w-md border border-gray-800">
-        <h1 className="text-3xl font-bold text-white mb-2">Welcome back</h1>
-        <p className="text-gray-400 mb-8">Login to your study planner</p>
-
-        {error && (
-          <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg mb-6">
-            {error}
+    <div style={{ minHeight: '100vh', background: 'var(--navy)', display: 'flex' }}>
+      
+      {/* Left Panel */}
+      <div style={{
+        width: '45%',
+        background: 'var(--navy-2)',
+        borderRight: '1px solid var(--navy-3)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        padding: '48px',
+      }}>
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '80px' }}>
+            <div style={{
+              width: '32px', height: '32px',
+              background: 'linear-gradient(135deg, var(--gold), var(--gold-light))',
+              borderRadius: '8px'
+            }} />
+            <span style={{ fontFamily: 'Syne', fontWeight: '700', fontSize: '18px' }}>
+              StudyPlanner
+            </span>
           </div>
-        )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="text-gray-400 text-sm mb-1 block">Email</label>
-            <input
-              type="email"
-              placeholder="you@example.com"
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="w-full bg-gray-800 text-white px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:border-indigo-500"
-              required
-            />
+          <div className="fade-up fade-up-1">
+            <p style={{ color: 'var(--gold)', fontFamily: 'Syne', fontSize: '13px', letterSpacing: '0.1em', marginBottom: '16px' }}>
+              AI-POWERED LEARNING
+            </p>
+            <h1 style={{ fontSize: '42px', fontWeight: '800', lineHeight: '1.15', marginBottom: '20px' }}>
+              Study smarter,<br />not harder.
+            </h1>
+            <p style={{ color: 'var(--slate)', fontSize: '16px', lineHeight: '1.7', maxWidth: '340px' }}>
+              Let AI analyze your subjects, deadlines, and habits to build a study plan that actually works.
+            </p>
           </div>
-          <div>
-            <label className="text-gray-400 text-sm mb-1 block">Password</label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              className="w-full bg-gray-800 text-white px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:border-indigo-500"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-medium transition"
-          >
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
+        </div>
 
-        <p className="text-gray-400 text-center mt-6">
-          Don't have an account?{' '}
-          <Link to="/register" className="text-indigo-400 hover:underline">
-            Sign up
-          </Link>
-        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {[
+            { num: '3x', label: 'Better retention with AI scheduling' },
+            { num: '94%', label: 'Students hit their exam targets' },
+            { num: '2h', label: 'Saved daily with smart planning' },
+          ].map((stat, i) => (
+            <div key={i} className={`fade-up fade-up-${i + 2}`} style={{
+              display: 'flex', alignItems: 'center', gap: '16px',
+              padding: '16px', borderRadius: '12px',
+              background: 'var(--navy-3)',
+              border: '1px solid var(--navy-4)'
+            }}>
+              <span style={{ fontFamily: 'Syne', fontWeight: '800', fontSize: '22px', color: 'var(--gold)' }}>
+                {stat.num}
+              </span>
+              <span style={{ color: 'var(--slate)', fontSize: '14px' }}>{stat.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Right Panel */}
+      <div style={{
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '48px',
+      }}>
+        <div style={{ width: '100%', maxWidth: '400px' }} className="fade-up fade-up-1">
+          <h2 style={{ fontFamily: 'Syne', fontSize: '28px', fontWeight: '700', marginBottom: '8px' }}>
+            Welcome back
+          </h2>
+          <p style={{ color: 'var(--slate)', marginBottom: '36px', fontSize: '15px' }}>
+            Sign in to your account
+          </p>
+
+          {error && (
+            <div style={{
+              background: 'rgba(248,113,113,0.1)',
+              border: '1px solid rgba(248,113,113,0.3)',
+              color: 'var(--red)',
+              padding: '12px 16px',
+              borderRadius: '10px',
+              marginBottom: '20px',
+              fontSize: '14px'
+            }}>
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div>
+              <label style={{ display: 'block', color: 'var(--slate)', fontSize: '13px', marginBottom: '8px', fontFamily: 'Syne', letterSpacing: '0.05em' }}>
+                EMAIL
+              </label>
+              <input
+                type="email"
+                placeholder="you@example.com"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                className="input"
+                required
+              />
+            </div>
+            <div>
+              <label style={{ display: 'block', color: 'var(--slate)', fontSize: '13px', marginBottom: '8px', fontFamily: 'Syne', letterSpacing: '0.05em' }}>
+                PASSWORD
+              </label>
+              <input
+                type="password"
+                placeholder="••••••••"
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                className="input"
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-gold"
+              style={{ padding: '14px', fontSize: '15px', marginTop: '8px', width: '100%', cursor: 'pointer', border: 'none' }}
+            >
+              {loading ? 'Signing in...' : 'Sign In →'}
+            </button>
+          </form>
+
+          <p style={{ color: 'var(--slate)', textAlign: 'center', marginTop: '28px', fontSize: '14px' }}>
+            Don't have an account?{' '}
+            <Link to="/register" style={{ color: 'var(--gold)', textDecoration: 'none', fontWeight: '500' }}>
+              Create one free
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
